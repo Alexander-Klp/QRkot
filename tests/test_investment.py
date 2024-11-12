@@ -1,5 +1,6 @@
 import pytest
 
+
 DONATION_URL = '/donation/'
 PROJECTS_URL = '/charity_project/'
 

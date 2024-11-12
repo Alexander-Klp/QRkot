@@ -3,6 +3,7 @@ from datetime import datetime
 
 import pytest
 
+
 PROJECTS_URL = '/charity_project/'
 PROJECT_DETAILS_URL = PROJECTS_URL + '{project_id}'
 
