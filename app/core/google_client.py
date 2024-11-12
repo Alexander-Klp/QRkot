@@ -1,4 +1,3 @@
-# Подключаем классы асинхронной библиотеки
 from aiogoogle import Aiogoogle
 from aiogoogle.auth.creds import ServiceAccountCreds
 
@@ -13,7 +12,9 @@ INFO = {
     'type': settings.type,
     'project_id': settings.project_id,
     'private_key_id': settings.private_key_id,
-    'private_key': settings.private_key.replace('\\n', '\n'),
+    'private_key': settings.private_key.replace(
+        '\\n', '\n'
+    ) if settings.private_key else '',
     'client_email': settings.client_email,
     'client_id': settings.client_id,
     'auth_uri': settings.auth_uri,
