@@ -11,10 +11,8 @@ logger = logging.getLogger("uvicorn.error")
 
 FORMAT = "%Y/%m/%d %H:%M:%S"
 
-now_date_time = datetime.now().strftime(FORMAT)
-
 SPREADSHEETS_BODY = {
-    'properties': {'title': f'Отчёт на {now_date_time}',
+    'properties': {'title': '',
                    'locale': 'ru_RU'},
     'sheets': [{'properties': {'sheetType': 'GRID',
                                'sheetId': 0,
@@ -28,7 +26,7 @@ PERMISSIONS_BODY = {'type': 'user',
                     'emailAddress': settings.email}
 
 TABLE_VALUES = [
-    ['Отчёт от', now_date_time],
+    ['Отчёт от', ''],
     ['Топ проектов по скорости закрытия'],
     ['Название проекта', 'Время сбора', 'Описание']
 ]
@@ -40,6 +38,10 @@ UPDATE_BODY = {
 
 
 async def spreadsheets_create(wrapper_services: Aiogoogle) -> str:
+    now_date_time = datetime.now().strftime(FORMAT)
+    SPREADSHEETS_BODY['properties']['title'] = (   # type: ignore
+        f'Отчёт на {now_date_time}'
+    )
     service = await wrapper_services.discover('sheets', 'v4')
     spreadsheet_body = SPREADSHEETS_BODY
     response = await wrapper_services.as_service_account(
@@ -70,7 +72,10 @@ async def spreadsheets_update_value(
         wrapper_services: Aiogoogle
 ) -> None:
     service = await wrapper_services.discover('sheets', 'v4')
-    table_values = TABLE_VALUES
+    now_date_time = datetime.now().strftime(FORMAT)
+    TABLE_VALUES[0][1] = now_date_time
+    table_values = []
+    table_values.extend(TABLE_VALUES)
     for project in projects:
         new_row = [
             str(project['name']),
@@ -78,12 +83,12 @@ async def spreadsheets_update_value(
             str(project['description']),
         ]
         table_values.append(new_row)
-    update_body = UPDATE_BODY
+    UPDATE_BODY['values'] = table_values
     response = await wrapper_services.as_service_account( # noqa
         service.spreadsheets.values.update(
             spreadsheetId=spreadsheet_id,
             range='A1:E30',
             valueInputOption='USER_ENTERED',
-            json=update_body
+            json=UPDATE_BODY
         )
     )

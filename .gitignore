@@ -130,3 +130,7 @@ dmypy.json
 
 # .idea
 .idea
+
+# Лучше не знать, что там такое =)
+temp.py
+temp2.py
