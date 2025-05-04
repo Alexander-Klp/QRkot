@@ -1,4 +1,4 @@
-# CharityFlow
+# QRkot
 
 backend-сервис для распределения пожертвований с интеграцией Google Sheets
 
